@@ -2,12 +2,12 @@ import React from "react";
 import { useTheme } from "../context/ThemeContext";
 
 const ThemeSwitcher = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme }: any = useTheme();
 
   return (
     <button
       onClick={toggleTheme}
-      className="fixed top-4 right-4 px-2 py-2 bg-gray-800 text-white rounded-md"
+      className="fixed top-6 right-4 px-2 py-2 bg-gray-800 text-white rounded-md"
     >
       {theme !== "light" ? (
         <svg

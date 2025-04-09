@@ -1,86 +1,144 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import usePostAdd from '../Hook/addTeacher';
+import { X } from 'lucide-react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const AddTeachers = ({ onSave, onClose }) => {
-  const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    subject: '',
-    class: '',
-    gender: '',
-    age: '',
-  });
+function AddTeachers() {
+  const [fullname, fullnameSet] = useState('');
+  const [email, emailSet] = useState('');
+  const [phone_number, phone_numberSet] = useState('');
+  const [password, passwordSet] = useState('');
+  const [Role, roleSet] = useState('');
+  const [is_verified, verifiedSet] = useState('');
 
-  const [extraData, setExtraData] = useState({
-    about: '',
-    file: null,
-  });
+  const { postData, data, error, setData, setError } = usePostAdd('/users/add');
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const save = async (event) => {
+    event.preventDefault();
+    const user = {
+      fullname,
+      email,
+      phone_number,
+      password,
+      Role,
+      is_verified,
+    };
 
-  const handleExtraChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === 'file') {
-      setExtraData({ ...extraData, file: files[0] });
+    const result = await postData(user, true);
+    console.log(result);
+
+    if (result) {
+      fullnameSet('');
+      emailSet('');
+      phone_numberSet('');
+      passwordSet('');
+      roleSet('');
+      verifiedSet('');
+
+      toast.success('Teacher added successfully!');
     } else {
-      setExtraData({ ...extraData, [name]: value });
+      toast.error('Failed to add teacher. Please try again.');
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSave(formData);
-  };
+  if (error) {
+    toast.error(`Error: ${error}`);
+  }
 
   return (
-    <div className="p-6 bg-white shadow-lg rounded-lg mx-auto w-[981px] h-auto">
-      <form className="grid grid-cols-2 gap-4" onSubmit={handleSubmit}>
-        <div>
-          <label className="block text-[#A7A7A7]">Full Name</label>
-          <input type="text" name="fullName" className="w-full p-2 border rounded" placeholder="Full Name" value={formData.fullName} onChange={handleChange} />
+    <>
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+
+      <form onSubmit={save} className="p-[20px] bg-white rounded-[8px] shadow-md">
+        <div className="flex justify-between items-center mb-[20px]">
+          <h1 className="text-[20px] text-[#333] font-kumbh font-semibold">
+            Add New Teacher
+          </h1>
+          <button
+            type="submit"
+            className="bg-[#509CDB] text-white rounded-[8px] w-[120px] h-[40px] text-[14px] font-semibold"
+          >
+            Save
+          </button>
         </div>
-        <div>
-          <label className="block text-[#A7A7A7]">Email address</label>
-          <input type="email" name="email" className="w-full p-2 border rounded" placeholder="Email address" value={formData.email} onChange={handleChange} />
-        </div>
-        <div>
-          <label className="block text-[#A7A7A7]">Subject</label>
-          <input type="text" name="subject" className="w-full p-2 border rounded" placeholder="Subject" value={formData.subject} onChange={handleChange} />
-        </div>
-        <div>
-          <label className="block text-[#A7A7A7]">Class</label>
-          <input type="text" name="class" className="w-full p-2 border rounded" placeholder="Class" value={formData.class} onChange={handleChange} />
-        </div>
-        <div>
-          <label className="block text-[#A7A7A7]">Gender</label>
-          <select name="gender" className="w-full p-2 border rounded" value={formData.gender} onChange={handleChange}>
-            <option value="">Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-        </div>
-        <div>
-          <label className="block text-[#A7A7A7]">Age</label>
-          <input type="number" name="age" className="w-full p-2 border rounded" placeholder="Age" value={formData.age} onChange={handleChange} />
-        </div>
-        <div className="col-span-2 grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-[#A7A7A7]">About</label>
-            <textarea name="about" className="w-full p-2 border rounded" placeholder="About the teacher" value={extraData.about} onChange={handleExtraChange}></textarea>
+
+        <div className="flex flex-col gap-[15px] md:flex-row md:gap-[30px] mb-[20px]">
+          <div className="flex flex-col w-full">
+            <label className="text-[#8A8A8A] font-medium text-[14px]">Full Name</label>
+            <input
+              type="text"
+              placeholder="Enter Full Name"
+              className="border-[#A7A7A7] border-[1px] rounded-[8px] h-[42px] px-[10px] text-[#333] font-medium text-[14px] outline-none"
+              onChange={(e) => fullnameSet(e.target.value)}
+              value={fullname}
+            />
           </div>
-          <div>
-            <label className="block text-[#A7A7A7]">Upload File</label>
-            <input type="file" name="file" className="w-full p-2 border rounded" onChange={handleExtraChange} />
+
+          <div className="flex flex-col w-full">
+            <label className="text-[#8A8A8A] font-medium text-[14px]">Email</label>
+            <input
+              type="email"
+              placeholder="Enter Email"
+              className="border-[#A7A7A7] border-[1px] rounded-[8px] h-[42px] px-[10px] text-[#333] font-medium text-[14px] outline-none"
+              onChange={(e) => emailSet(e.target.value)}
+              value={email}
+            />
           </div>
         </div>
-        <div className="col-span-2 flex justify-end mt-4">
-          <button type="button" className="bg-gray-500 text-white px-4 py-2 rounded mr-2" onClick={onClose}>Cancel</button>
-          <button type="submit" className="bg-[#152259] text-white px-4 py-2 rounded">Save</button>
+
+        <div className="flex flex-col gap-[15px] md:flex-row md:gap-[30px] mb-[20px]">
+          <div className="flex flex-col w-full">
+            <label className="text-[#8A8A8A] font-medium text-[14px]">Phone Number</label>
+            <input
+              type="text"
+              placeholder="Enter Phone Number"
+              className="border-[#A7A7A7] border-[1px] rounded-[8px] h-[42px] px-[10px] text-[#333] font-medium text-[14px] outline-none"
+              onChange={(e) => phone_numberSet(e.target.value)}
+              value={phone_number}
+            />
+          </div>
+
+          <div className="flex flex-col w-full">
+            <label className="text-[#8A8A8A] font-medium text-[14px]">Password</label>
+            <input
+              type="password"
+              placeholder="Enter Password"
+              className="border-[#A7A7A7] border-[1px] rounded-[8px] h-[42px] px-[10px] text-[#333] font-medium text-[14px] outline-none"
+              onChange={(e) => passwordSet(e.target.value)}
+              value={password}
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-[15px] md:flex-row md:gap-[30px] mb-[20px]">
+          <div className="flex flex-col w-full">
+            <label className="text-[#8A8A8A] font-medium text-[14px]">Role</label>
+            <select
+              className="border-[#A7A7A7] border-[1px] rounded-[8px] h-[42px] px-[10px] text-[#333] font-medium text-[14px] outline-none"
+              onChange={(e) => roleSet(e.target.value)}
+              value={Role}
+            >
+              <option value="USER">USER</option>
+              <option value="ADMIN">ADMIN</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col w-full">
+            <label className="text-[#8A8A8A] font-medium text-[14px]">Verified</label>
+            <select
+              className="border-[#A7A7A7] border-[1px] rounded-[8px] h-[42px] px-[10px] text-[#333] font-medium text-[14px] outline-none"
+              onChange={(e) => verifiedSet(e.target.value)}
+              value={is_verified}
+            >
+              <option value="false">False</option>
+              <option value="true">True</option>
+            </select>
+          </div>
         </div>
       </form>
-    </div>
+    </>
   );
-};
+}
 
 export default AddTeachers;

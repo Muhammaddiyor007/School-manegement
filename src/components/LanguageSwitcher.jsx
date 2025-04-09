@@ -7,9 +7,8 @@ const LanguageSwitcher = () => {
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   return (
-    <div className="fixed top-4 right-[70px]">
+    <div className="fixed top-6 right-[70px]">
       <div className="relative">
-        {/* Dropdown button */}
         <button
           onClick={toggleDropdown}
           className="px-4 py-2 bg-blue-600 text-white rounded-md"
@@ -17,7 +16,6 @@ const LanguageSwitcher = () => {
           {language.toUpperCase()} ▼
         </button>
 
-        {/* Dropdown menu */}
         {isOpen && (
           <div className="absolute right-0 mt-2 w-32  border rounded-md shadow-lg overflow-hidden">
             {["uz", "ru", "en"].map((lang) => (
@@ -25,7 +23,7 @@ const LanguageSwitcher = () => {
                 key={lang}
                 onClick={() => {
                   changeLanguage(lang);
-                  setIsOpen(false); // Close dropdown
+                  setIsOpen(false); 
                 }}
                 className={`block w-full px-4 py-2 text-left ${
                   language === lang ? "bg-blue-100" : "hover:bg-gray-100"

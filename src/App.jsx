@@ -16,6 +16,7 @@ import Exams from "./components/Exams";
 import AddTeachers from "./components/AddTeachers";
 import ThemeSwitcher from "./components/ThemeSwitcher";
 import LanguageSwitcher from "./components/LanguageSwitcher";
+import TeacherDetail from "./components/TeacherDetail";
 
 function App() {
   const users = [
@@ -74,6 +75,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />}>
               <Route path="dashboard_home" element={<Dashboard_home />} />
               <Route path="teachers" element={<Teachers />} />
+              <Route path="teacher/:id" element={<TeacherDetail />} />
               <Route path="add_teachers" element={<AddTeachers />} />
               <Route path="students" element={<Students />} />
               <Route path="billing" element={<Billing users={users} />} />

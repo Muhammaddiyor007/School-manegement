@@ -9,7 +9,7 @@ const Dashboard_home = () => {
   return (
     <div className="relative ">
       <Navbar />
-      <h1 className="px-[127.5px] text-[36px] font-semibold pt-10">
+      <h1 className="px-[127.5px] text-[36px] font-semibold pt-20">
         Welcome to your dashboard, Udemy school
       </h1>
       <h3 className="px-[232px] py-6 font-semibold">
